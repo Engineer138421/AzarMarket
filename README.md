@@ -11,44 +11,56 @@ through Telegram.
 > **Project status:** Active development. APIs, data sources, commands, and
 > internal architecture may change as the project evolves.
 
+---
+
 ## Overview
 
-Azar Market currently brings together several market-information functions:
+Azar Market brings together several market-information and automation
+capabilities in a single Telegram-based platform:
 
 - Tehran Stock Exchange (TSE) monitoring
-- Gold, currency, oil, and cryptocurrency price monitoring
-- Order-book / queue analysis for supported TSE symbols
+- Gold and currency price monitoring
+- Oil and cryptocurrency price monitoring
+- Order-book and queue analysis for supported TSE symbols
 - Financial news aggregation
-- IPO detection and reminder workflow
-- AI-assisted news impact analysis
-- Market analysis dashboard
-- Interactive Telegram price queries
+- IPO detection and reminder workflows
+- AI-assisted market and news analysis
+- Interactive Telegram market queries
 - Personal price alerts
-- Gold invoice calculator
+- Gold calculation and invoice workflow
 - Automated market cards and channel reports
 - SQLite-based historical market snapshots
-- Daily performance reporting and 24-hour market polls
+- Daily performance reporting
+- 24-hour market prediction polls
+
+---
 
 ## Architecture
 
-The current project is intentionally modular:
+Azar Market is organized into modular Python components:
 
 | Module | Responsibility |
 |---|---|
-| `bot.py` | Telegram application, handlers, scheduled jobs, AI pipeline, user interactions |
-| `market_data.py` | Market data collection and normalization |
+| `bot.py` | Telegram application, command handlers, scheduled jobs, AI pipeline, and user interactions |
+| `market_data.py` | Market data collection, normalization, and price calculations |
 | `bourse_service.py` | Tehran Stock Exchange index and symbol/board data |
 | `news_service.py` | Multi-source financial news aggregation and filtering |
 | `database.py` | SQLite database, market history, alerts, polls, and IPO records |
 | `image_generator.py` | Market-card generation using Pillow |
 | `template.png` | Visual template used by the market-card generator |
 
-## Market data
+The architecture is designed to allow individual services and data providers to
+evolve independently as the project grows.
 
-The current implementation uses public web/API endpoints for market information.
-The exact sources and integrations may evolve over time.
+---
 
-Current market coverage includes, depending on source availability:
+## Market Data
+
+The current implementation uses public web and API endpoints for market
+information. Data sources and integrations may change over time depending on
+availability, reliability, and project requirements.
+
+Current market coverage includes:
 
 - USD / Iranian toman
 - EUR / Iranian toman
@@ -59,19 +71,21 @@ Current market coverage includes, depending on source availability:
 - Quarter coin
 - Global gold ounce
 - Brent oil
-- Tether
 - Bitcoin
-- Tehran Stock Exchange index and supported symbols
+- Tehran Stock Exchange index
+- Supported Tehran Stock Exchange symbols
 
-`market_data.py` normalizes incoming numeric data and calculates percentage
-changes for the supported assets.
+`market_data.py` normalizes incoming numeric values and calculates percentage
+changes for supported assets.
 
-## Tehran Stock Exchange engine
+---
 
-The TSE component supports interactive symbol lookup and market-board
-information.
+## Tehran Stock Exchange Engine
 
-The current bot can expose information such as:
+The TSE component provides interactive market information for supported symbols
+and market indices.
+
+The current implementation can expose information such as:
 
 - Last traded price
 - Closing price
@@ -81,19 +95,21 @@ The current bot can expose information such as:
 - Trading value
 - Number of trades
 - Buy/sell queue status
-- Calculated price change percentage
+- Calculated price-change percentage
 
-The bot also supports a continuously available market-index value for use in
-reports and market cards.
+The service also includes resilience mechanisms for accessing TSE-related web
+data and supports market-index information for reports and market cards.
 
-## News and IPO engine
+---
 
-`news_service.py` aggregates financial RSS sources from Iranian and international
-markets.
+## News and IPO Engine
+
+`news_service.py` aggregates financial news from Iranian and international
+sources.
 
 The current source configuration includes feeds such as:
 
-- Sena
+- Sana
 - Bourse Press
 - Bourse News
 - Nabz-e Bourse
@@ -105,43 +121,93 @@ The current source configuration includes feeds such as:
 - MarketWatch
 - CNBC Commodities
 
-The bot can use these news items for filtering, deduplication, market-impact
-analysis, and IPO-related workflows.
+The news engine can be used for:
 
-## AI analysis
+- News collection
+- Filtering
+- Deduplication
+- Market-impact analysis
+- Asset and direction classification
+- IPO-related workflows
 
-The current AI layer uses the Groq Python client and supports a fallback list of
-models configured in `bot.py`.
+### IPO Radar
+
+The project also includes an IPO-oriented workflow that can extract structured
+information from relevant announcements, including fields such as:
+
+- Symbol
+- Offering price
+- Share quantity
+- Capital-related information
+- Liquidity or participation information
+
+Relevant IPO records are stored in the local SQLite database to support
+deduplication and reminder workflows.
+
+---
+
+## AI Analysis
+
+The current AI layer uses the **Groq Python client** and supports a fallback
+list of models configured in `bot.py`.
 
 AI-assisted functionality includes:
 
 - Market analysis
-- News impact interpretation
+- News-impact interpretation
 - Structured financial explanations
 - IPO information extraction workflows
 - User-facing analytical responses
 
-AI output should be treated as analysis generated from available data, not as a
-guarantee of future market behavior.
+AI-generated results are based on available market and news information and
+should not be interpreted as guarantees of future market behavior.
 
-## User features
+---
+
+## Telegram User Features
 
 The Telegram interface currently includes workflows such as:
 
-- `/price` — market prices
-- `/tse` — TSE symbol lookup
-- `/bourse` — TSE symbol lookup
-- `/calc` — gold calculation workflow
-- `/alert` — create a price alert
-- `/myalerts` — view user alerts
-- `/news` — market news
-- AI-assisted analysis workflows
+| Command | Function |
+|---|---|
+| `/price` | Market price information |
+| `/tse` | TSE symbol lookup |
+| `/bourse` | TSE symbol lookup |
+| `/calc` | Gold calculation workflow |
+| `/alert` | Create a price alert |
+| `/myalerts` | View user alerts |
+| `/news` | Market news |
+| AI workflows | Market and news analysis |
 
-Additional commands and UI flows are part of ongoing development.
+Additional commands, interfaces, and workflows are part of ongoing development.
 
-## Automated channel operations
+---
 
-The bot includes scheduled workflows for:
+## Gold Calculation
+
+Azar Market includes a gold calculation workflow designed to provide
+informational purchase and pricing calculations.
+
+The current workflow supports calculations involving:
+
+- 18K gold
+- Wage / making charges
+- Seller profit
+- VAT
+- Melted gold / bullion-style calculations
+- Gold trading calculations
+
+The exact calculation logic is implemented in `bot.py` and may evolve as the
+project develops.
+
+---
+
+## Automated Channel Operations
+
+The bot includes scheduled workflows for automated market monitoring and
+reporting.
+
+These workflows include:
 
 - Periodic market snapshots
 - Automated market-card generation
@@ -149,15 +215,17 @@ The bot includes scheduled workflows for:
 - Round-level gold price alerts
 - Daily IPO reminders
 - Daily performance summaries
-- 24-hour prediction polls
+- 24-hour market prediction polls
 
 The exact schedule is controlled by the current implementation in `bot.py`.
 
-## Historical data
+---
+
+## Historical Data
 
 Azar Market uses SQLite for local runtime storage.
 
-The current database includes structures for:
+The database currently supports structures for:
 
 - Market-history snapshots
 - User price alerts
@@ -170,44 +238,50 @@ The runtime database file is:
 market_history.db
 ```
 
-It is intentionally excluded from GitHub. The database schema is created and
-updated by `database.py` when the application initializes.
+The database file is intentionally excluded from the public Git repository.
 
-This means the public repository contains the database logic, not the private
-historical dataset accumulated by a particular deployment.
+The database schema is created and updated by `database.py` when the application
+initializes.
+
+This means the public repository contains the database logic, while the private
+historical dataset accumulated by a particular deployment remains local.
+
+---
 
 ## Installation
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
+git clone https://github.com/Engineer138421/AzarMarket.git
 cd AzarMarket
 ```
 
-### 2. Create a virtual environment
+### 2. Create a Virtual Environment
 
-Windows:
+#### Windows
 
 ```bash
 python -m venv venv
 venv\Scripts\activate
 ```
 
-macOS/Linux:
+#### macOS / Linux
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 3. Install dependencies
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configure credentials
+### 4. Configure Credentials
+
+The project uses a local environment file for private credentials.
 
 Copy:
 
@@ -221,7 +295,7 @@ to:
 gemini-code.env
 ```
 
-Then set:
+Then configure the required credentials:
 
 ```env
 BOT_TOKEN=your_telegram_bot_token
@@ -230,7 +304,7 @@ GROQ_API_KEY=your_groq_api_key
 
 **Never publish `gemini-code.env`.**
 
-### 5. Run
+### 5. Run the Bot
 
 ```bash
 python bot.py
@@ -238,9 +312,13 @@ python bot.py
 
 The application initializes the SQLite database automatically when it starts.
 
-## Repository safety
+---
 
-The following are intentionally excluded from Git:
+## Configuration and Security
+
+Private credentials and local runtime data must never be committed to Git.
+
+The following files and directories are intentionally excluded from Git:
 
 ```text
 gemini-code.env
@@ -249,28 +327,67 @@ venv/
 __pycache__/
 market_history.db
 *.db
+*.sqlite
+*.sqlite3
 ```
 
-Do not remove these protections just to make the project easier to upload.
+Never commit:
 
-## Project roadmap
+- Telegram bot tokens
+- API keys
+- Passwords
+- Private credentials
+- Local runtime databases
+- Other sensitive configuration files
 
-Azar Market is under active development. Planned areas may include:
+If a secret is accidentally exposed, revoke or rotate it immediately.
 
-- More market-data providers
-- More TSE analytics
+For additional security guidance, see:
+
+[`SECURITY.md`](SECURITY.md)
+
+---
+
+## Development
+
+Azar Market is currently under active development.
+
+The project is being developed with a focus on:
+
+- Modular market-data services
+- Financial information aggregation
+- Telegram automation
+- AI-assisted analysis
+- Historical market data
+- Automated reporting
+- Extensible provider architecture
+
+APIs, commands, data providers, and internal implementation details may change
+during development.
+
+---
+
+## Project Roadmap
+
+Planned development areas may include:
+
+- Additional market-data providers
+- Expanded TSE analytics
 - Improved historical analytics
 - More configurable alerts
-- Better news classification
+- Improved news classification
 - Expanded AI analysis
 - Modular provider architecture
 - Automated testing
 - Improved deployment configuration
-- Docker / cloud deployment support
+- Docker and cloud deployment support
 - Public API interfaces
-- Better documentation and contributor workflows
+- Better documentation
+- Improved contributor workflows
 
-The roadmap is expected to evolve with the project.
+The roadmap is expected to evolve as the project develops.
+
+---
 
 ## Contributing
 
@@ -279,21 +396,43 @@ Contributions are welcome.
 Before submitting a Pull Request:
 
 1. Explain the problem being solved.
-2. Keep changes focused.
+2. Keep changes focused and reviewable.
 3. Avoid committing secrets or local runtime databases.
 4. Test the affected functionality.
 5. Update documentation when behavior changes.
+6. Follow the existing project structure and coding conventions.
+
+For larger changes, opening an issue before implementation is recommended so the
+proposed direction can be discussed.
+
+---
+
+## Security
+
+If you discover a security issue, please avoid publishing sensitive credentials
+or exploit details in a public issue.
+
+See [`SECURITY.md`](SECURITY.md) for security-related guidance.
+
+---
 
 ## Disclaimer
 
-Azar Market is an informational and software-automation project. Market prices,
-news, calculations, AI analyses, and other outputs may contain errors,
-interruptions, delays, or inaccuracies.
+Azar Market is an informational and software-automation project.
+
+Market prices, financial news, calculations, AI analyses, and other outputs may
+contain errors, interruptions, delays, or inaccuracies.
 
 Nothing in this project constitutes financial, investment, legal, accounting,
-or tax advice. Users should independently verify important information before
-making financial decisions.
+or tax advice.
+
+Users should independently verify important information before making financial
+decisions.
+
+---
 
 ## License
 
-Azar Market is released under the MIT License. See `LICENSE` for details.
+Azar Market is released under the MIT License.
+
+See [`LICENSE`](LICENSE) for details.
