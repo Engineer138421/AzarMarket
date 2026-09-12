@@ -1,0 +1,25 @@
+# Core Telegram bot
+python-telegram-bot[job-queue]>=21.0,<23.0
+
+# Environment / configuration
+python-dotenv>=1.0,<2.0
+
+# AI
+groq>=0.20,<1.0
+
+# Market data / HTTP
+requests>=2.31,<3.0
+
+# News RSS
+feedparser>=6.0,<7.0
+
+# Persian/Jalali date support
+jdatetime>=5.0,<6.0
+
+# Market-card image generation
+Pillow>=10.0,<12.0
+arabic-reshaper>=3.0,<4.0
+python-bidi>=0.6,<1.0
+
+# Optional: only required if you use gemini_test.py
+google-genai>=1.0,<2.0

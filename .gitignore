@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Environment files / secrets
+.env
+.env.*
+*.env
+!*.env.example
+gemini-code.env
+
+# Local databases / runtime data
+*.db
+*.sqlite
+*.sqlite3
+market_history.db
+
+# Logs / local runtime files
+*.log
+*.tmp
+*.bak
+
+# IDE / editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test / coverage artifacts
+.pytest_cache/
+.coverage
+htmlcov/
